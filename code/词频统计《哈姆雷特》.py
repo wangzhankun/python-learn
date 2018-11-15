@@ -18,10 +18,12 @@ the       , 1138‪‬‪‬‪‬‪‬‪‬‮‬‫‬‮‬‪‬‪‬‪�
 '''
 import re
 import collections
-with open('hamlet.txt', 'r', encoding='utf-8') as f:
+with open('/home/wang/Documents/github/python-learn/code/hamlet.txt', 'r', encoding='utf-8') as f:
     words_box = []
     for line in f:
         if re.match(r'[a-zA-Z0-9]*', line):  # 避免中文影响
             words_box.extend(line.strip().split())
 a = collections.Counter(words_box)
-print(a.most_common(10))
+b = a.most_common(10)
+for key,value in b:
+    print("{:<10},{:>5}".format(key,value))
