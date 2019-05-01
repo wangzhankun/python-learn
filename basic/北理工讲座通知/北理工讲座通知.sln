@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.106
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "北理工讲座通知", "北理工讲座通知\北理工讲座通知.pyproj", "{A6B7D5C4-3C42-4AA5-BB49-97DE0D5362F1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A6B7D5C4-3C42-4AA5-BB49-97DE0D5362F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6B7D5C4-3C42-4AA5-BB49-97DE0D5362F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {AF626CD7-FC24-4B1D-82DB-905005F7E2C4}
+	EndGlobalSection
+EndGlobal
