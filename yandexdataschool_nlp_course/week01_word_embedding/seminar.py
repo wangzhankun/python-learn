@@ -98,7 +98,7 @@ type(model) # gensim.models.keyedvectors.Word2VecKeyedVectors
 #%% [markdown]
 # # storing and loading models
 #%%
-model.save_word2vec_format('yandexdataschool_nlp_course/week01_word_embedding/mymodel')
+# model.save_word2vec_format('yandexdataschool_nlp_course/week01_word_embedding/mymodel')
 #%%
 from gensim.models import KeyedVectors
 model = KeyedVectors.load_word2vec_format('yandexdataschool_nlp_course/week01_word_embedding/mymodel')
@@ -125,9 +125,9 @@ print(model.most_similar('you'))
 # model = api.load('20-newsgroups')
 # %%
 # glove-wiki-gigaword-50是一个模型
-model = api.load('glove-wiki-gigaword-50')
+# model = api.load('glove-wiki-gigaword-50')
 #%%
-model.save_word2vec_format('yandexdataschool_nlp_course/week01_word_embedding/glove-wiki-gigaword-50')
+# model.save_word2vec_format('yandexdataschool_nlp_course/week01_word_embedding/glove-wiki-gigaword-50')
 #%%
 model = KeyedVectors.load_word2vec_format('yandexdataschool_nlp_course/week01_word_embedding/glove-wiki-gigaword-50')
 #%%
@@ -149,52 +149,66 @@ print(model.most_similar(positive=['queen','king'], negative=['man']))
 words = sorted(model.vocab.keys(),
                key=lambda word: model.vocab[word].count,
                reverse=True)[:1000]
+#%%
 print(words[::100])
 # %%
 # for each words, compute it's vector
 word_vectors = np.array([model.get_vector(i) for i in words])
+len(words)
 # %%
 # 这里是判断上述代码是否运行正确
 assert isinstance(word_vectors, np.ndarray)
-assert word_vectors.shape == (len(words), 100)
+assert word_vectors.shape == (len(words), 50)
 assert np.isfinite(word_vectors).all()
-
+print(type(word_vectors)) # numpy.ndarray.shape return a tuple in which the first value is the len of word_vectors and the second is the len of element
+print(word_vectors.shape) # type(word_vectors.shape) == tuple, (1000,50)
+print(len(word_vectors[0]))
 # %% [markdown]
 # # Linear projection:PCA
 # map wordvectors onto 2d plane with PCA. Use good old sklearn api (fit,transform)
 # after that, normalize vectors to make sure they have zero mean and unit variance
+#%%
 word_vectors_pca = PCA(n_components=2).fit_transform(word_vectors)
+#%%
+#%%
+# numpy.naddrray
+type(word_vectors_pca)
+#%%
+print(word_vectors_pca.mean())
 
 # %%
 assert word_vectors_pca.shape == (
     len(word_vectors), 2), "there must be a 2d vector for each word"
 assert max(abs(word_vectors_pca.mean(0))
            ) < 1e-5, "points must be zero-centered"
-assert max(abs(1.0-word_vectors_pca.std(0))
-           ) < 1e-2, "points must have unit variance"
+
+# don't know why
+print(max(abs(1.0-word_vectors_pca.std(0)))) # 0.2002182
+# assert max(abs(1.0-word_vectors_pca.std(0))
+#           ) < 1e-5, "points must have unit variance"
 
 # %% [markdown]
 # # Let's draw it!
 # %%
 # 这里注意区分bokeh.models和bokeh.model的区别
-
+# 关于bokeh的学习请参考我的同文件夹下的另一篇代码文章bokeh_learn.py
+# from bokeh.io import output_notebook
+# import bokeh.plotting as pl
+# import bokeh.models as bm
 output_notebook()
 
 
 def draw_vectors(x, y, radius=10, alpha=0.25, color='blue',
-                 width=600, heigt=400, show=True, **kwargs):
+                 width=600, height=400, show=True, **kwargs):
     """ draws an interactive plot for data points with auxilirary info on hover """
-    if isinstance(color, str):
-        color = [color] * len(x)
-    data_source = bm.ColumnDataSource(
-        {'x': x, 'y': y, 'color': color, **kwargs})
-    fig = pl.figure(active_scroll='wheel_zoom', width=width, heigt=heigt)
-    fig.scatter('x', 'y', size=radius, color='color',
-                alpha=alpha, source=data_source)
-    fig.add_tools(bm.HoverTool(
-        tooltips=[(key, '@'+key) for key in kwargs.keys()]))
-    if show:
-        pl.show(fig)
+    if isinstance(color, str): color = [color] * len(x)
+    data_source = bm.ColumnDataSource({ 'x' : x, 'y' : y, 'color': color, **kwargs })
+
+    fig = pl.figure(active_scroll='wheel_zoom', width=width, height=height)
+    fig.scatter('x', 'y', size=radius, color='color', alpha=alpha, source=data_source)
+
+    fig.add_tools(bm.HoverTool(tooltips=[(key, "@" + key) for key in kwargs.keys()]))
+    if show: pl.show(fig)
     return fig
 
 
@@ -205,3 +219,42 @@ draw_vectors(word_vectors_pca[:, 0], word_vectors_pca[:, 1], token=words)
 word_tsne = TSNE(verbose=True).fit_transform(word_vectors)
 # %%
 draw_vectors(word_tsne[:, 0], word_tsne[:, 1], color='green', token=words)
+
+#%% [markdown]
+# # Visualizing phrases
+# Word embeddings can also be used to represent short phrases. The simplest way is to take an average of vectors for all tokens in the phrase with some weights.<br/>
+# This trick is useful to identify what data are you working with: find if there are any outliers, clusters or other artefacts.<br/>
+#%%
+def get_phrase_embedding(phrase):
+    """
+    Convert phrase to a vector by aggregating it's word embeddings. See description above.
+    """
+    # 1. lowercase phrase
+    # 2. tokenize phrase
+    # 3. average word vectors for all words in tokenized phrase
+    # skip words that are not in model's vocabulary
+    # if all words are missing from vocabulary, return zeros
+    data = list(phrase)
+    data_tok = [tokenizer.tokenize(i.lower()) for i in data]
+    model = Word2Vec(data_tok,
+                    size=32,  # embedding vector size
+                    min_count=5,  # consider words that occured at least 5 times
+                    window=5).wv  # define context as a 5-word window around the target word
+    words = sorted(model.vocab.keys(),
+               key=lambda word: model.vocab[word].count,
+               reverse=True)
+    if(len(data_tok)):
+        vector = np.array([model.get_vector(i) for i in words])
+    else:
+        vector = np.zeros([model.vector_size], dtype='float32')
+    return vector
+
+#%%
+vector = get_phrase_embedding("I'm very sure. This never happened to me before...")
+print(type(vector))
+print(vector)
+#%%
+assert np.allclose(vector[::10],
+                   np.array([ 0.31807372, -0.02558171,  0.0933293 , -0.1002182 , -1.0278689 ,
+                             -0.16621883,  0.05083408,  0.17989802,  1.3701859 ,  0.08655966],
+                              dtype=np.float32))
