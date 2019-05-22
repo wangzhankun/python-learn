@@ -8,12 +8,11 @@ import gensim.downloader as api
 from gensim.models import Word2Vec
 from nltk.tokenize import WordPunctTokenizer
 import numpy as np
-
 # %%
 data = list(open(
     'yandexdataschool_nlp_course\week01_word_embedding\quora.txt', encoding='utf-8'))
 # data = list(open('quora.txt',encoding='utf-8'))
-data[50]
+print(data[50])
 
 # %% [markdown]
 # 使用nltk进行处理文本。因为文本里面含有大量特殊符号标点，引用nltk会使得处理变得简单
