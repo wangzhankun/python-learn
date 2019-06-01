@@ -76,13 +76,13 @@ def ANN_model(X, y, nn_hdim):
         probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
 
         # 向后传播算法
-        delta3 = probs # 得到的预测值
-        delta3[range(num_indim), y] -= 1 # 预测值减去实际值
-        delta2 = delta3.dot(W2.T) * (1 - np.power(a1, 2))
-        dW2 = (a1.T).dot(delta3)
-        db2 = np.sum(delta3, axis=1, keepdims=True) # b2的导数
-        dW1 = np.dot(X.T, delta2) # W1的导数
-        db1 = np.sum(delta2, axis=0) # b1的导数
+        delta3 = probs # 得到的预测值  [200*2]
+        delta3[range(num_indim), y] -= 1
+        delta2 = delta3.dot(W2.T) * (1 - np.power(a1, 2)) # [200*3]
+        dW2 = (a1.T).dot(delta3) # [3*2]
+        db2 = np.sum(delta3, axis=0, keepdims=True) # b2的导数 [200*1]
+        dW1 = np.dot(X.T, delta2) # W1的导数 [2*3]
+        db1 = np.sum(delta2, axis=0) # b1的导数 
 
         # 添加正则化项
         dW1 += reg_lambda * W1
@@ -116,7 +116,6 @@ def plot_decision_boundary(pred_func, X, y):
     # Plot the contour and training examples
     plt.contourf(xx, yy, Z, cmap=plt.cm.Spectral)
     plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.Spectral)
-    plt.title("Hidden Layer size 3")
     plt.show()
 
 
@@ -133,4 +132,28 @@ def generate_data():
 #%%
 X, y = generate_data()
 hidden_3_model = ANN_model(X, y, 3)
+plt.title("Hidden Layer size 3")
 plot_decision_boundary(lambda x: predict(hidden_3_model, x), X, y)
+
+
+#%%
+# 隐层节点数目对人工神经网络模型的影响
+# 待输入隐层节点数目
+hidden_layer_dimensions = [1,2,3,4,30,50]
+
+for i,nn_hdim in enumerate(hidden_layer_dimensions):
+    plt.title('Hidden Layer size %d' % nn_hdim)
+    model = ANN_model(X, y, nn_hdim)
+    plot_decision_boundary(lambda x: predict(model, x), X, y)
+
+#%%
+# 不同学习速率对人工神经网络的影响
+epsilon = 0.01 # 梯度下降的学习率
+epsilons = [0.01, 0.02, 0.03, 0.1, 0.2, 0.3, 0.5, 1]
+for i in epsilons:
+    epsilon = i
+    plt.title("Epsilon %f" % epsilon)
+    model = ANN_model(X, y, nn_hdim = 3)
+    plot_decision_boundary(lambda x: predict(model, x), X, y)
+
+#%%
