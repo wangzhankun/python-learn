@@ -6,6 +6,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.zip
+*.rar
+*.pdf
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -259,3 +262,6 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+#jupyter checkpoints
+.ipynb_checkpoints
