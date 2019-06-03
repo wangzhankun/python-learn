@@ -157,3 +157,11 @@ for i in epsilons:
     plot_decision_boundary(lambda x: predict(model, x), X, y)
 
 #%%
+epsilons = [0.01, 0.008, 0.007, 0.006, 0.005, 0.0001]
+for i in epsilons:
+    epsilon = i
+    plt.title("Epsilon %f" % epsilon)
+    model = ANN_model(X, y, nn_hdim = 3)
+    plot_decision_boundary(lambda x: predict(model, x), X, y)
+
+#%%
