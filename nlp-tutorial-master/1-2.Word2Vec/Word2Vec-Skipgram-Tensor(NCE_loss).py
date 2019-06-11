@@ -2,12 +2,14 @@
   code by Tae Hwan Jung(Jeff Jung) @graykode
   reference : https://github.com/golbin/TensorFlow-Tutorials/blob/master/04%20-%20Neural%20Network%20Basic/03%20-%20Word2Vec.py
 '''
+#%%
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import numpy as np
 
 tf.reset_default_graph()
 
+#%%
 # 3 Words Sentence
 sentences = [ "i like dog", "i like cat", "i like animal",
               "dog cat animal", "apple cat dog like", "dog fish milk like",
@@ -19,12 +21,14 @@ word_list = " ".join(sentences).split()
 word_list = list(set(word_list))
 word_dict = {w: i for i, w in enumerate(word_list)}
 
+#%%
 # Word2Vec Parameter
 batch_size = 20
 embedding_size = 2 # To show 2 dim embedding graph
 num_sampled = 10 # for negative sampling, less than batch_size
 voc_size = len(word_list)
 
+#%%
 def random_batch(data, size):
     random_inputs = []
     random_labels = []
@@ -36,6 +40,7 @@ def random_batch(data, size):
 
     return random_inputs, random_labels
 
+#%%
 # Make skip gram of one size window
 skip_grams = []
 for i in range(1, len(word_sequence) - 1):
@@ -45,6 +50,7 @@ for i in range(1, len(word_sequence) - 1):
     for w in context:
         skip_grams.append([target, w])
 
+#%%
 # Model
 inputs = tf.placeholder(tf.int32, shape=[batch_size])
 labels = tf.placeholder(tf.int32, shape=[batch_size, 1]) # To use tf.nn.nce_loss, [batch_size, 1]
@@ -59,6 +65,7 @@ nce_biases = tf.Variable(tf.zeros([voc_size]))
 cost = tf.reduce_mean(tf.nn.nce_loss(nce_weights, nce_biases, labels, selected_embed, num_sampled, voc_size))
 optimizer = tf.train.AdamOptimizer(0.001).minimize(cost)
 
+#%%
 # Training
 with tf.Session() as sess:
     init = tf.global_variables_initializer()
@@ -72,9 +79,18 @@ with tf.Session() as sess:
             print('Epoch:', '%04d' % (epoch + 1), 'cost =', '{:.6f}'.format(loss))
 
     trained_embeddings = embeddings.eval()
+    saver = tf.train.Saver() # 保存图
+    save_path = saver.save(sess, "checkpoints/text8.ckpt")
+    embed_mat = sess.run(embeddings)
 
+#%%
 for i, label in enumerate(word_list):
     x, y = trained_embeddings[i]
     plt.scatter(x, y)
     plt.annotate(label, xy=(x, y), xytext=(5, 2), textcoords='offset points', ha='right', va='bottom')
 plt.show()
+
+#%%
+print(x,y)
+print(trained_embeddings)
+#%%
