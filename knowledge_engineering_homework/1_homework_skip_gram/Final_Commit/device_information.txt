@@ -1,0 +1,19 @@
+# cd data
+# python3 skip_gram.py
+100000000
+ anarchism originated as a term of abuse first use
+['anarchism', 'originated', 'abuse', 'working', 'class', 'radicals', 'diggers', 'revolution', 'sans', 'culottes']
+WARNING:tensorflow:From skip_gram.py:220: calling reduce_sum (from tensorflow.python.ops.math_ops) with keep_dims is deprecated and will be removed in a future version.
+Instructions for updating:
+keep_dims is deprecated, use keepdims instead
+2019-06-20 04:27:44.477080: I tensorflow/core/platform/cpu_feature_guard.cc:141] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-06-20 04:27:45.082182: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:897] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-06-20 04:27:45.083560: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1392] Found device 0 with properties:
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.6325
+pciBusID: 0000:00:02.0
+totalMemory: 10.92GiB freeMemory: 10.76GiB
+2019-06-20 04:27:45.083610: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1471] Adding visible gpu devices: 0
+2019-06-20 04:27:45.276207: I tensorflow/core/common_runtime/gpu/gpu_device.cc:952] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-06-20 04:27:45.276291: I tensorflow/core/common_runtime/gpu/gpu_device.cc:958]      0
+2019-06-20 04:27:45.276307: I tensorflow/core/common_runtime/gpu/gpu_device.cc:971] 0:   N
+2019-06-20 04:27:45.276530: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1084] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10409 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:00:02.0, compute capability: 6.1)
