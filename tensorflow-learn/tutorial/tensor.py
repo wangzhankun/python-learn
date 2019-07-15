@@ -39,3 +39,52 @@ rank = tf.rank(my_image)
 print(sess.run(rank))
 
 #%%
+my_matrix = tf.random_uniform([3,3,3])
+print(my_matrix)
+print(sess.run((my_matrix, my_matrix[1, 2, 1], my_matrix[1,2], my_matrix[1])))
+
+#%%
+print(my_image.shape)
+print(type(my_image.shape))
+
+#%%
+zeros = tf.zeros(my_image.shape[1])
+print(sess.run(zeros))
+zeros = tf.zeros(my_image.shape[:2])
+print(zeros.shape)
+
+#%%
+# 改变形状
+rank_three_tensor = tf.ones([3,4,5])
+matrix = tf.reshape(rank_three_tensor, [6,10])
+matrixB = tf.reshape(matrix, [3,-1])
+matrixAlt = tf.reshape(matrixB, [4,3,-1])
+print(matrix.shape)
+print(matrixB.shape)
+print(matrixAlt.shape)
+#%%
+errorMatrix = tf.reshape(matrix, [4,2, -1])
+print(errorMatrix.shape)
+
+#%%
+# 数据类型
+# 可以将任意数据结构序列化为string并存储在tf.Tensor中
+float_tensor = tf.cast(tf.constant([1,2,3]), dtype=tf.float32)
+
+
+
+#%%
+constant = tf.constant([1,2,3])
+tensor = constant * constant
+with tf.Session().as_default():
+    print(tensor.eval())
+    
+
+#%%
+p = tf.placeholder(tf.float32)
+t = p + 1.
+with tf.Session().as_default():
+    # t.eval() # this will fail, since the placeholder did not get a value
+    print(t.eval(feed_dict={p:2.}))
+
+#%%
