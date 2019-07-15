@@ -207,7 +207,7 @@ with train_graph.as_default():
         with tf.name_scope("weights"):
             Weight = tf.Variable(tf.truncated_normal([embedding_row_dim, embedding_col_dim], stddev = 0.1), name='Weight')
             tf.summary.histogram('embedding/weights', Weight)
-        # 偏差。官方推荐不初始化为0    
+        # 偏差。
         with tf.name_scope('biases'):
             biase = tf.Variable(tf.zeros(embedding_row_dim)+0.1, name='biase')
             tf.summary.histogram('embedding/biases', biase)

@@ -25,6 +25,7 @@ def prepocess(text, freq=5):
     words_count = Counter(words)  # 每个单词的对应的数量
     words = [word.lower() for word in words if words_count[word] > freq]
 
+    # 高频抽样代码参考自网络
     # subsampling
     t = 1e-5
     threshold = 0.8 # 剔除概率阈值
