@@ -125,4 +125,20 @@ for i in range(1, 21, 2):
     plot_value_array(i, predictions, test_labels)
 plt.show()
 
+#%% [markdown]
+# 对单个图像进行预测
+img = test_images[0]
+img = (np.expand_dims(img, 0))
+predictions_single = model.predict(img)
+print(predictions_single)
+print(np.argmax(predictions_single))
+
+#%%
+plot_value_array(0, predictions_single, test_labels)
+plt.xticks(range(10), class_names, rotation=45)
+plt.show()
+
+#%%
+prediction_result = np.argmax(predictions_single[0])
+
 #%%

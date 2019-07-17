@@ -9,6 +9,11 @@
 *.zip
 *.rar
 *.pdf
+*.7z
+#tensorflow checkpoint
+*.ckpt*
+*.h5
+
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
