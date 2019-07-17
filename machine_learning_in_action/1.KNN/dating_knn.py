@@ -93,11 +93,12 @@ def classfier():
     predictions = []
     accuracy = 0
     for i in range(test_data.shape[0]):
-        label = classfy(train_data, train_labels, test_data[i], k=1)
+        label = classfy(train_data, train_labels, test_data[i], k=20)
         predictions.append(label)
         if label == test_labels[i]:
             accuracy += 1
-    print("Accuracy: {:5.2f}%".format(accuracy/test_data.shape[0]))
+
+    print("Accuracy: {:5.2f}%".format(100*accuracy/test_data.shape[0]))
     print(predictions)
     
 
